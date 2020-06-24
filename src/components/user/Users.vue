@@ -48,7 +48,7 @@
                                    @click="removeUserById(scope.row.id)"></el-button>
                         <!-- 分配角色按钮 -->
                         <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-                            <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+                            <el-button @click="setRole(scope.row)" type="warning" icon="el-icon-setting" size="mini"></el-button>
                         </el-tooltip>
                     </template>
                 </el-table-column>
@@ -116,6 +116,21 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="editUserInfo">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 分配角色的对话框 -->
+        <el-dialog
+                title="分配角色"
+                :visible.sync="setRoleDialogVisible"
+                width="50%">
+            <div>
+                <p>当前的用户：{{userInfo.username}}</p>
+                <P>当前的角色：{{userInfo.role_name}}</P>
+            </div>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="setRoleDialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="setRoleDialogVisible = false">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -249,7 +264,11 @@ export default {
             trigger: 'blur'
           }
         ]
-      }
+      },
+      // 控制分配角色对话框的显示与隐藏
+      setRoleDialogVisible: false,
+      // 需要被分配橘色的用户信息
+      userInfo: {}
     }
   },
   created () {
@@ -365,6 +384,11 @@ export default {
 
       this.$message.success('删除用户成功！')
       this.getUserList()
+    },
+    // 展示分配角色的对话框
+    setRole (userInfo) {
+      this.userInfo = userInfo
+      this.setRoleDialogVisible = true
     }
   }
 }
